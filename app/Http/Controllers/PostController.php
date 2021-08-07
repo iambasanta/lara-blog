@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Category;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with(['category', 'author'])->latest()->get();
-        return view('posts', compact('posts'));
+        return view('posts', [
+            'posts' => Post::latest()->filter(request(['search']))->get(),
+            'categories' => Category::all(),
+        ]);
     }
 
     public function show(Post $post)
